@@ -152,6 +152,43 @@ async function handleDialogFlowAction(
   parameters
 ) {
   switch (action) {
+    case "Estudios.action":
+      let estudios=[
+        {
+          id:1,
+          nombre:"Ultrasonido 4D",
+          descripcion:"Es un utrasonido 4D",
+          precio: 250
+        },
+        {
+          id:2,
+          nombre:"Análisis prenatal",
+          descripcion:"Es un análisis prenatal",
+          precio: 300
+        },
+        {
+          id:3,
+          nombre:"Ultrasonido de mama",
+          descripcion:"Es un utrasonido de mama",
+          precio: 350
+        }
+      ];
+      let tarjetas=[];
+      estudios.forEach(estudio => {
+        tarjetas.push({
+          title:estudio.nombre+" $"+estudio.precio,
+          subtitle:estudio.descripcion,          
+          buttons:[            
+            {
+              type:"postback",
+              title:"Hacer cita",
+              payload:"Hacer_cita"
+            }
+          ],
+        }); 
+      });
+      sendGenericMessage(sender, tarjetas);
+      break;
     case "Ubicacion.action":
       sendTextMessage(sender, "Este es un mensaje desde el código");
       handleMessages(messages, sender);
