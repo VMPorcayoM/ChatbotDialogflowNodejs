@@ -7,7 +7,12 @@ const axios = require("axios");
 //files
 const config = require("../config");
 const dialogflow = require("../dialogflow");
-const { structProtoToJson } = require("./helpers/structFunctions");
+const {
+  structProtoToJson
+} = require("./helpers/structFunctions");
+//MongoDB models
+const ChatbotEstudio = require("../Models/Estudios");
+
 
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
@@ -153,39 +158,36 @@ async function handleDialogFlowAction(
 ) {
   switch (action) {
     case "Estudios.action":
-      let estudios=[
-        {
-          id:1,
-          nombre:"Ultrasonido 4D",
-          descripcion:"Es un utrasonido 4D",
+      let estudios = [{
+          id: 1,
+          nombre: "Ultrasonido 4D",
+          descripcion: "Es un utrasonido 4D",
           precio: 250
         },
         {
-          id:2,
-          nombre:"Análisis prenatal",
-          descripcion:"Es un análisis prenatal",
+          id: 2,
+          nombre: "Análisis prenatal",
+          descripcion: "Es un análisis prenatal",
           precio: 300
         },
         {
-          id:3,
-          nombre:"Ultrasonido de mama",
-          descripcion:"Es un utrasonido de mama",
+          id: 3,
+          nombre: "Ultrasonido de mama",
+          descripcion: "Es un utrasonido de mama",
           precio: 350
         }
       ];
-      let tarjetas=[];
+      let tarjetas = [];
       estudios.forEach(estudio => {
         tarjetas.push({
-          title:estudio.nombre+" $"+estudio.precio,
-          subtitle:estudio.descripcion,          
-          buttons:[            
-            {
-              type:"postback",
-              title:"Hacer cita",
-              payload:"Hacer_cita"
-            }
-          ],
-        }); 
+          title: estudio.nombre + " $" + estudio.precio,
+          subtitle: estudio.descripcion,
+          buttons: [{
+            type: "postback",
+            title: "Hacer cita",
+            payload: "Hacer_cita"
+          }],
+        });
       });
       sendGenericMessage(sender, tarjetas);
       break;
@@ -256,10 +258,9 @@ async function handleCardMessages(messages, sender) {
         button = {
           type: "postback",
           title: message.card.buttons[b].text,
-          payload:
-            message.card.buttons[b].postback === ""
-              ? message.card.buttons[b].text
-              : message.card.buttons[b].postback,
+          payload: message.card.buttons[b].postback === "" ?
+            message.card.buttons[b].text :
+            message.card.buttons[b].postback,
         };
       }
       buttons.push(button);
@@ -356,8 +357,7 @@ async function getUserData(senderId) {
   let access_token = config.FB_PAGE_TOKEN;
   try {
     let userData = await axios.get(
-      "https://graph.facebook.com/v6.0/" + senderId,
-      {
+      "https://graph.facebook.com/v6.0/" + senderId, {
         params: {
           access_token,
         },
@@ -511,8 +511,7 @@ function sendTypingOff(recipientId) {
  */
 function callSendAPI(messageData) {
   return new Promise((resolve, reject) => {
-    request(
-      {
+    request({
         uri: "https://graph.facebook.com/v6.0/me/messages",
         qs: {
           access_token: config.FB_PAGE_TOKEN,
