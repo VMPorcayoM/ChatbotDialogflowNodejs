@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const mongoose = require('mongoose');
+const config = require("../chatbotDialogflowNodejs/config");
+
 
 const port = process.env.PORT || 3000;
 
@@ -19,9 +21,10 @@ app.use(
   })
 );
 
+
 mongoose.connect(
 
-  'mongodb+srv://victorporcayo:131998@chatbotlaboratorioclust.sauks.mongodb.net/chatbotDB?retryWrites=true&w=majority', {
+  config.MONGODB, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
